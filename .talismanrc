@@ -1,0 +1,10 @@
+fileignoreconfig:
+- filename: devbox.lock
+  checksum: 403cd996af8e352cf2465616709d2a09a49266eab7f3001454a7591c143cd5e5
+- filename: environments/test/mumbai/eks/cluster.yaml
+  checksum: 30055c81eabccd21fbb31cc0b10829cdc104456c07ee64d4bbf3614efdd5ea11
+- filename: modules/eks/main.tf
+  checksum: 3229950a9551c5254ac6d6f1e2f7e9562dfd40315db0db26ffea35b60529004e
+- filename: root.hcl
+  checksum: 7d0c960c264b1de4a05b3a9caedf6af1bcea24958b31947b94efcb6b73a03d50
+version: "1.0"

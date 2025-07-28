@@ -1,0 +1,58 @@
+# Terraform files
+*.tfstate
+*.tfstate.*
+*.tfplan
+*.tfvars
+!*.tfvars.example
+.terraform/
+.terraform.lock.hcl
+
+# Terragrunt files
+.terragrunt-cache/
+*.tfplan
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Kubeconfig file
+kubeconfig
+
+# Devbox files
+.devbox/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Backup files
+*.backup
+*.bak
+
+# Temporary files
+*.tmp
+*.temp
+
+# Kubernetes config
+kubeconfig*
+*.kubeconfig
+
+# Helm
+charts/
+*.tgz
+
+# AWS CLI files
+.aws/
+
+# Local environment files
+.env
+.env.local
+.env.*.local
+.envrc
+

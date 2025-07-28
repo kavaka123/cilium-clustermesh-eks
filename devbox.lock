@@ -1,0 +1,213 @@
+{
+  "lockfile_version": "1",
+  "packages": {
+    "awscli2@latest": {
+      "last_modified": "2025-07-17T10:11:59Z",
+      "resolved": "github:NixOS/nixpkgs/fa0ef8a6bb1651aa26c939aeb51b5f499e86b0ec#awscli2",
+      "source": "devbox-search",
+      "version": "2.27.50",
+      "systems": {
+        "aarch64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/h74q3311nclskcyrncj1kw7w747fd4jf-awscli2-2.27.50",
+              "default": true
+            },
+            {
+              "name": "dist",
+              "path": "/nix/store/vz40liviv1351a89ncqzhp4xffakshqp-awscli2-2.27.50-dist"
+            }
+          ],
+          "store_path": "/nix/store/h74q3311nclskcyrncj1kw7w747fd4jf-awscli2-2.27.50"
+        },
+        "aarch64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/csvbn708nih4310bz8xgwjh1lqykjip4-awscli2-2.27.50",
+              "default": true
+            },
+            {
+              "name": "dist",
+              "path": "/nix/store/66zcgjkx5163wxkx4q4wy2mlinnac73h-awscli2-2.27.50-dist"
+            }
+          ],
+          "store_path": "/nix/store/csvbn708nih4310bz8xgwjh1lqykjip4-awscli2-2.27.50"
+        },
+        "x86_64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/dxj0qjhm41qw8akm842akgpcb5zjkkf7-awscli2-2.27.50",
+              "default": true
+            },
+            {
+              "name": "dist",
+              "path": "/nix/store/92rz6l78nqdiv952srximfxfjg0m9a91-awscli2-2.27.50-dist"
+            }
+          ],
+          "store_path": "/nix/store/dxj0qjhm41qw8akm842akgpcb5zjkkf7-awscli2-2.27.50"
+        },
+        "x86_64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/84x45xrqhadw16y11xkmyy9chh4hmd5m-awscli2-2.27.50",
+              "default": true
+            },
+            {
+              "name": "dist",
+              "path": "/nix/store/p05rkykwh1h0wfkdmqlc5dy6afqbx434-awscli2-2.27.50-dist"
+            }
+          ],
+          "store_path": "/nix/store/84x45xrqhadw16y11xkmyy9chh4hmd5m-awscli2-2.27.50"
+        }
+      }
+    },
+    "eksctl@0.211.0": {
+      "last_modified": "2025-07-24T15:00:16Z",
+      "resolved": "github:NixOS/nixpkgs/b74a30dbc0a72e20df07d43109339f780b439291#eksctl",
+      "source": "devbox-search",
+      "version": "0.211.0",
+      "systems": {
+        "aarch64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/s7qxwxvam4cprnc4bsq69310ky7w3123-eksctl-0.211.0",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/s7qxwxvam4cprnc4bsq69310ky7w3123-eksctl-0.211.0"
+        },
+        "aarch64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/8374qpa38f2ziq0b9r81yrl874f1n0a6-eksctl-0.211.0",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/8374qpa38f2ziq0b9r81yrl874f1n0a6-eksctl-0.211.0"
+        },
+        "x86_64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/mn7bm6xpfjvp3708bd0hw0x4dr7zf2sx-eksctl-0.211.0",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/mn7bm6xpfjvp3708bd0hw0x4dr7zf2sx-eksctl-0.211.0"
+        },
+        "x86_64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/pzh9wx63cwc0f4ilywfk9p58qdc2rs9w-eksctl-0.211.0",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/pzh9wx63cwc0f4ilywfk9p58qdc2rs9w-eksctl-0.211.0"
+        }
+      }
+    },
+    "terraform@1.12.2": {
+      "last_modified": "2025-07-13T22:45:35Z",
+      "resolved": "github:NixOS/nixpkgs/a421ac6595024edcfbb1ef950a3712b89161c359#terraform",
+      "source": "devbox-search",
+      "version": "1.12.2",
+      "systems": {
+        "aarch64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/mm2c99sw758j0kqbmwcl1aydh2x308x4-terraform-1.12.2",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/mm2c99sw758j0kqbmwcl1aydh2x308x4-terraform-1.12.2"
+        },
+        "aarch64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/p423g613paxs9ldbnkr5mcxrgb5ilwfh-terraform-1.12.2",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/p423g613paxs9ldbnkr5mcxrgb5ilwfh-terraform-1.12.2"
+        },
+        "x86_64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/xn003hjbh4qf2ck38h2qck60wh04h0y9-terraform-1.12.2",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/xn003hjbh4qf2ck38h2qck60wh04h0y9-terraform-1.12.2"
+        },
+        "x86_64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/r827xxb0f2xkkizh71ijgwcm4g2lybwi-terraform-1.12.2",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/r827xxb0f2xkkizh71ijgwcm4g2lybwi-terraform-1.12.2"
+        }
+      }
+    },
+    "terragrunt@0.83.2": {
+      "last_modified": "2025-07-19T04:40:28Z",
+      "resolved": "github:NixOS/nixpkgs/6b4955211758ba47fac850c040a27f23b9b4008f#terragrunt",
+      "source": "devbox-search",
+      "version": "0.83.2",
+      "systems": {
+        "aarch64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/0qz8g2zn48n5y01w73gm77n5p5amqqvr-terragrunt-0.83.2",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/0qz8g2zn48n5y01w73gm77n5p5amqqvr-terragrunt-0.83.2"
+        },
+        "aarch64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/gc9jibqrw35wvxv3ccqgb2cl3zpmfgdv-terragrunt-0.83.2",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/gc9jibqrw35wvxv3ccqgb2cl3zpmfgdv-terragrunt-0.83.2"
+        },
+        "x86_64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/1sqzcvzf2yninr38qy3bcsgbs47nw123-terragrunt-0.83.2",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/1sqzcvzf2yninr38qy3bcsgbs47nw123-terragrunt-0.83.2"
+        },
+        "x86_64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/m8n627iwm446889znkqhvq9xvmkcd5cc-terragrunt-0.83.2",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/m8n627iwm446889znkqhvq9xvmkcd5cc-terragrunt-0.83.2"
+        }
+      }
+    }
+  }
+}
