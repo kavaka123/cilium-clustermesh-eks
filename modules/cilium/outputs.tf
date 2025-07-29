@@ -29,3 +29,8 @@ output "clustermesh_enabled" {
   description = "Whether ClusterMesh is enabled"
   value       = var.clustermesh_enabled
 }
+
+output "clustermesh_apiserver_endpoint" {
+  description = "API server endpoint for ClusterMesh"
+  value       = helm_release.cilium.values[0].clustermesh.apiserver.service.loadBalancerIP
+}

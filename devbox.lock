@@ -65,6 +65,102 @@
         }
       }
     },
+    "cilium-cli@0.18.5": {
+      "last_modified": "2025-07-13T22:45:35Z",
+      "resolved": "github:NixOS/nixpkgs/a421ac6595024edcfbb1ef950a3712b89161c359#cilium-cli",
+      "source": "devbox-search",
+      "version": "0.18.5",
+      "systems": {
+        "aarch64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/3s85rc1ipx17s2dbgq4jc36dghryf6ga-cilium-cli-0.18.5",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/3s85rc1ipx17s2dbgq4jc36dghryf6ga-cilium-cli-0.18.5"
+        },
+        "aarch64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/a841ac3l4x5rab85zp6r0p1dak1gs54x-cilium-cli-0.18.5",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/a841ac3l4x5rab85zp6r0p1dak1gs54x-cilium-cli-0.18.5"
+        },
+        "x86_64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/wcg48kd47qk7imjl5pvdrc81q1rc04ap-cilium-cli-0.18.5",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/wcg48kd47qk7imjl5pvdrc81q1rc04ap-cilium-cli-0.18.5"
+        },
+        "x86_64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/vwc5w3zi90kmlpxm0hl5jrmcsy063yn1-cilium-cli-0.18.5",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/vwc5w3zi90kmlpxm0hl5jrmcsy063yn1-cilium-cli-0.18.5"
+        }
+      }
+    },
+    "direnv@latest": {
+      "last_modified": "2025-07-21T09:58:03Z",
+      "resolved": "github:NixOS/nixpkgs/2baf8e1658cba84a032c3a8befb1e7b06629242a#direnv",
+      "source": "devbox-search",
+      "version": "2.37.1",
+      "systems": {
+        "aarch64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/2yxm2j7kwmjvvjph8x2mmfhmzhaj1y5c-direnv-2.37.1",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/2yxm2j7kwmjvvjph8x2mmfhmzhaj1y5c-direnv-2.37.1"
+        },
+        "aarch64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/8dfqhbnfc65fv4rxpjp2knvsc0c2h7f7-direnv-2.37.1",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/8dfqhbnfc65fv4rxpjp2knvsc0c2h7f7-direnv-2.37.1"
+        },
+        "x86_64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/sl2ay9dwylk2nvyxsg2kpcclhahgzhnb-direnv-2.37.1",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/sl2ay9dwylk2nvyxsg2kpcclhahgzhnb-direnv-2.37.1"
+        },
+        "x86_64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/cayixg88lflclgcwjlc21bih648in6ff-direnv-2.37.1",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/cayixg88lflclgcwjlc21bih648in6ff-direnv-2.37.1"
+        }
+      }
+    },
     "eksctl@0.211.0": {
       "last_modified": "2025-07-24T15:00:16Z",
       "resolved": "github:NixOS/nixpkgs/b74a30dbc0a72e20df07d43109339f780b439291#eksctl",
@@ -110,6 +206,54 @@
             }
           ],
           "store_path": "/nix/store/pzh9wx63cwc0f4ilywfk9p58qdc2rs9w-eksctl-0.211.0"
+        }
+      }
+    },
+    "hubble@1.17.2": {
+      "last_modified": "2025-07-13T22:45:35Z",
+      "resolved": "github:NixOS/nixpkgs/a421ac6595024edcfbb1ef950a3712b89161c359#hubble",
+      "source": "devbox-search",
+      "version": "1.17.2",
+      "systems": {
+        "aarch64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/l5d4yl4r825040dj7nqx6lz8x199c632-hubble-1.17.2",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/l5d4yl4r825040dj7nqx6lz8x199c632-hubble-1.17.2"
+        },
+        "aarch64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/ran9krzqhi7szpszcayp7zwihxncwzgm-hubble-1.17.2",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/ran9krzqhi7szpszcayp7zwihxncwzgm-hubble-1.17.2"
+        },
+        "x86_64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/n8xil8jdjxfiplqwqi6z29s7aggz5cik-hubble-1.17.2",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/n8xil8jdjxfiplqwqi6z29s7aggz5cik-hubble-1.17.2"
+        },
+        "x86_64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/g20039csx6hiirjv86c3przz292jxmxm-hubble-1.17.2",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/g20039csx6hiirjv86c3przz292jxmxm-hubble-1.17.2"
         }
       }
     },

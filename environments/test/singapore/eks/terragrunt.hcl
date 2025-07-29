@@ -20,15 +20,6 @@ dependency "vpc" {
   mock_outputs_allowed_terraform_commands = ["validate", "plan"]
 }
 
-dependency "peer_vpc" {
-  config_path = "../../mumbai/vpc"
-
-  mock_outputs = {
-    vpc_cidr_block = "10.21.0.0/16"
-  }
-  mock_outputs_allowed_terraform_commands = ["validate", "plan"]
-}
-
 # Generate provider configuration for Singapore region
 generate "provider" {
   path      = "provider.tf"
@@ -64,6 +55,7 @@ EOF
 
 inputs = {
   # Basic Configuration
+  cluster_id      = "2"
   cluster_name    = "eks-singapore"
   cluster_version = "1.33"
 
@@ -78,6 +70,4 @@ inputs = {
   node_min_size         = 1
   node_max_size         = 4
 
-  # Cross-cluster communication
-  peer_vpc_cidr = dependency.peer_vpc.outputs.vpc_cidr_block # Mumbai VPC CIDR
 }

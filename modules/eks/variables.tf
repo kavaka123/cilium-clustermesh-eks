@@ -54,14 +54,6 @@ variable "node_max_size" {
   default     = 4
 }
 
-
-
-variable "peer_vpc_cidr" {
-  description = "CIDR block of the peer VPC for cross-cluster communication"
-  type        = string
-  default     = ""
-}
-
 variable "tags" {
   description = "Additional tags"
   type        = map(string)

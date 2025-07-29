@@ -82,19 +82,6 @@ resource "aws_iam_role_policy_attachment" "node_group_cni_policy" {
   role       = aws_iam_role.node_group.name
 }
 
-# Security group rule for cross-cluster communication via CIDR
-resource "aws_security_group_rule" "cross_cluster_cidr_ingress" {
-  count = var.peer_vpc_cidr != "" ? 1 : 0
-
-  type              = "ingress"
-  from_port         = 0
-  to_port           = 0
-  protocol          = "-1"
-  cidr_blocks       = [var.peer_vpc_cidr]
-  security_group_id = var.security_group_id
-  description       = "Allow all traffic from peer VPC CIDR"
-}
-
 # EKS Cluster
 resource "aws_eks_cluster" "main" {
   name     = var.cluster_name

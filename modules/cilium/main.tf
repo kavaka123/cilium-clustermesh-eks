@@ -36,6 +36,15 @@ resource "helm_release" "cilium" {
         config = {
           enabled = var.clustermesh_enabled
         }
+        apiserver = {
+          service = {
+            type = "LoadBalancer"
+            annotations = {
+              "service.beta.kubernetes.io/aws-load-balancer-type"   = "nlb"
+              "service.beta.kubernetes.io/aws-load-balancer-scheme" = "internal"
+            }
+          }
+        }
       }
 
       encryption = {

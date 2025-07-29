@@ -13,7 +13,8 @@ dependency "eks" {
   config_path = "../eks"
 
   mock_outputs = {
-    cluster_id                         = "eks-singapore"
+    cluster_id                         = "2"
+    cluster_name                       = "eks-singapore"
     cluster_endpoint                   = "https://mock.eks.amazonaws.com"
     cluster_certificate_authority_data = "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0t"
     oidc_issuer_url                    = "https://oidc.eks.ap-southeast-1.amazonaws.com/id/mock"
@@ -40,10 +41,6 @@ terraform {
     helm = {
       source  = "hashicorp/helm"
       version = ">= 2.10"
-    }
-    null = {
-      source  = "hashicorp/null"
-      version = ">= 3.0"
     }
   }
 }
