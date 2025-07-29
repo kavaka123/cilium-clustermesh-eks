@@ -59,3 +59,9 @@ variable "tags" {
   type        = map(string)
   default     = {}
 }
+
+variable "service_cidr" {
+  description = "CIDR block for the Kubernetes service network"
+  type        = string
+  default     = "172.20.0.0/16"
+}

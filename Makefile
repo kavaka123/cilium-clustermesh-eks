@@ -7,7 +7,7 @@ terragrunt_cmds = $(foreach unit,$(terragrunt_units), \
 	$(foreach action,$(terraform_actions), \
 		$(unit)/$(action)))
 
-.PHONY: deploy deploy-vpcs deploy-peering deploy-eks deploy-cilium destroy validate fmt clean devbox-init devbox-shell $(terragrunt_cmds)
+.PHONY: deploy deploy-vpcs deploy-peering deploy-eks deploy-cilium destroy validate fmt clean devbox-init devbox-shell kubeconfig $(terragrunt_cmds)
 
 
 
@@ -112,3 +112,9 @@ devbox-init:
 devbox-shell:
 	@echo "🐚 Entering devbox shell..."
 	@devbox shell
+
+kubeconfig:
+	@echo "🔗 Setting up kubeconfig for EKS clusters..."
+	@aws eks update-kubeconfig --name eks-mumbai --region ap-south-1 --alias mumbai --kubeconfig ./kubeconfig/mumbai.yaml
+	@aws eks update-kubeconfig --name eks-singapore --region ap-southeast-1 --alias singapore --kubeconfig ./kubeconfig/singapore.yaml
+	@echo "✅ Kubeconfig setup completed!"

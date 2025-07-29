@@ -70,4 +70,5 @@ inputs = {
   node_min_size         = 1
   node_max_size         = 4
 
+  service_cidr = "172.21.0.0/16"
 }

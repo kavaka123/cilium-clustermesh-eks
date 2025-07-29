@@ -22,6 +22,16 @@ dependency "eks" {
   mock_outputs_allowed_terraform_commands = ["validate", "plan"]
 }
 
+# VPC dependency for private subnet IDs
+dependency "vpc" {
+  config_path = "../vpc"
+
+  mock_outputs = {
+    private_subnet_ids = ["subnet-12345", "subnet-67890"]
+  }
+  mock_outputs_allowed_terraform_commands = ["validate", "plan"]
+}
+
 # Generate provider configuration for Mumbai region
 generate "provider" {
   path      = "provider.tf"
@@ -93,6 +103,9 @@ inputs = {
 
   # EKS cluster details
   cluster_endpoint = dependency.eks.outputs.cluster_endpoint
+
+  # VPC details for internal load balancer
+  private_subnet_ids = dependency.vpc.outputs.private_subnet_ids
 
   # Cilium Configuration
   cilium_version          = "1.17.6"

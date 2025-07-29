@@ -5,7 +5,7 @@ include "root" {
 }
 
 terraform {
-  source = "../../../modules/aws-vpc-peering"
+  source = "../../../modules/peering"
 }
 
 # Dependencies - ensure VPCs are created first

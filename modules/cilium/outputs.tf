@@ -32,5 +32,23 @@ output "clustermesh_enabled" {
 
 output "clustermesh_apiserver_endpoint" {
   description = "API server endpoint for ClusterMesh"
-  value       = helm_release.cilium.values[0].clustermesh.apiserver.service.loadBalancerIP
+  value       = "https://${data.kubernetes_service.cilium_clustermesh_apiserver.status.0.load_balancer.0.ingress.0.hostname}:2379"
+}
+
+output "clustermesh_apiserver_remote_cacrt" {
+  description = "CA certificate for the remote ClusterMesh API server"
+  value       = data.kubernetes_secret.cilium_clustermesh_remote_cert.binary_data["ca.crt"]
+  sensitive   = true
+}
+
+output "clustermesh_apiserver_remote_tlscrt" {
+  description = "TLS certificate for the remote ClusterMesh API server"
+  value       = data.kubernetes_secret.cilium_clustermesh_remote_cert.binary_data["tls.crt"]
+  sensitive   = true
+}
+
+output "clustermesh_apiserver_remote_tlskey" {
+  description = "TLS key for the remote ClusterMesh API server"
+  value       = data.kubernetes_secret.cilium_clustermesh_remote_cert.binary_data["tls.key"]
+  sensitive   = true
 }

@@ -39,10 +39,17 @@ resource "helm_release" "cilium" {
         apiserver = {
           service = {
             type = "LoadBalancer"
-            annotations = {
-              "service.beta.kubernetes.io/aws-load-balancer-type"   = "nlb"
-              "service.beta.kubernetes.io/aws-load-balancer-scheme" = "internal"
-            }
+            annotations = merge(
+              {
+                "service.beta.kubernetes.io/aws-load-balancer-type"                              = "nlb"
+                "service.beta.kubernetes.io/aws-load-balancer-scheme"                            = "internal"
+                "service.beta.kubernetes.io/aws-load-balancer-internal"                          = "true"
+                "service.beta.kubernetes.io/aws-load-balancer-cross-zone-load-balancing-enabled" = "true"
+              },
+              length(var.private_subnet_ids) > 0 ? {
+                "service.beta.kubernetes.io/aws-load-balancer-subnets" = join(",", var.private_subnet_ids)
+              } : {}
+            )
           }
         }
       }

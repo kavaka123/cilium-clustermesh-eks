@@ -64,6 +64,12 @@ variable "node_selector" {
   default     = {}
 }
 
+variable "private_subnet_ids" {
+  description = "List of private subnet IDs for internal load balancer"
+  type        = list(string)
+  default     = []
+}
+
 variable "tags" {
   description = "Tags to apply to resources"
   type        = map(string)

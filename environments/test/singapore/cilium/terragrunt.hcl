@@ -22,6 +22,16 @@ dependency "eks" {
   mock_outputs_allowed_terraform_commands = ["validate", "plan"]
 }
 
+# VPC dependency for private subnet IDs
+dependency "vpc" {
+  config_path = "../vpc"
+
+  mock_outputs = {
+    private_subnet_ids = ["subnet-12345", "subnet-67890"]
+  }
+  mock_outputs_allowed_terraform_commands = ["validate", "plan"]
+}
+
 # Generate provider configuration for Singapore region
 generate "provider" {
   path      = "provider.tf"
@@ -62,11 +72,11 @@ provider "aws" {
 }
 
 data "aws_eks_cluster" "cluster" {
-  name = "${dependency.eks.outputs.cluster_id}"
+  name = "${dependency.eks.outputs.cluster_name}"
 }
 
 data "aws_eks_cluster_auth" "cluster" {
-  name = "${dependency.eks.outputs.cluster_id}"
+  name = "${dependency.eks.outputs.cluster_name}"
 }
 
 provider "kubernetes" {
@@ -76,7 +86,7 @@ provider "kubernetes" {
 }
 
 provider "helm" {
-  kubernetes {
+  kubernetes = {
     host                   = data.aws_eks_cluster.cluster.endpoint
     cluster_ca_certificate = base64decode(data.aws_eks_cluster.cluster.certificate_authority[0].data)
     token                  = data.aws_eks_cluster_auth.cluster.token
@@ -87,12 +97,15 @@ EOF
 
 inputs = {
   # Basic Configuration
-  cluster_name = dependency.eks.outputs.cluster_id
+  cluster_name = dependency.eks.outputs.cluster_name
   cluster_id   = 2
   region       = "ap-southeast-1"
 
   # EKS cluster details
   cluster_endpoint = dependency.eks.outputs.cluster_endpoint
+
+  # VPC details for internal load balancer
+  private_subnet_ids = dependency.vpc.outputs.private_subnet_ids
 
   # Cilium Configuration
   cilium_version          = "1.17.6"

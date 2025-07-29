@@ -94,6 +94,9 @@ resource "aws_eks_cluster" "main" {
     endpoint_public_access  = true
     security_group_ids      = [var.security_group_id]
   }
+  kubernetes_network_config {
+    service_ipv4_cidr = var.service_cidr
+  }
 
   # Disable default add-ons to use Cilium as CNI
   depends_on = [

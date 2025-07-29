@@ -69,4 +69,5 @@ inputs = {
   node_desired_capacity = 2
   node_min_size         = 1
   node_max_size         = 4
+  service_cidr          = "172.20.0.0/16"
 }
