@@ -22,6 +22,8 @@ deploy:
 	@$(MAKE) deploy-eks -j2
 	@echo "Stage 4: Deploying Cilium in parallel..."
 	@$(MAKE) deploy-cilium -j2
+	@echo "Stage 5: Deploying ClusterMesh components..."
+	@$(MAKE) deploy-clustermesh -j2
 	@echo "✅ Infrastructure deployment completed!"
 
 # Stage targets
@@ -32,6 +34,8 @@ deploy-peering: peering/apply
 deploy-eks: mumbai/eks/apply singapore/eks/apply
 
 deploy-cilium: mumbai/cilium/apply singapore/cilium/apply
+
+deploy-clustermesh: mumbai/clustermesh/apply singapore/clustermesh/apply
 
 
 # Destroy complete infrastructure in reverse order

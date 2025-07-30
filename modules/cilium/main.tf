@@ -25,14 +25,14 @@ resource "helm_release" "cilium" {
         mode = "eni"
       }
 
-      ipv4NativeRoutingCIDR      = "10.0.0.0/8"
-      egressMasqueradeInterfaces = "eth0"
-      routingMode                = "native" # Disable tunneling for ENI mode
+      ipv4NativeRoutingCIDR = "10.0.0.0/8"
+      # egressMasqueradeInterfaces = "eth0"
+      routingMode = "native" # Disable tunneling for ENI mode
 
       # ClusterMesh configuration
       clustermesh = {
         useAPIServer                       = true
-        enableEndpointSliceSynchronization = true
+        enableEndpointSliceSynchronization = false
         config = {
           enabled = var.clustermesh_enabled
         }

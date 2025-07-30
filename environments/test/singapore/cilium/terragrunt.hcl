@@ -109,7 +109,7 @@ inputs = {
 
   # Cilium Configuration
   cilium_version          = "1.17.6"
-  clustermesh_enabled     = true
+  clustermesh_enabled     = false
   hubble_enabled          = true
   hubble_ui_enabled       = false
   policy_enforcement_mode = "default"
