@@ -19,21 +19,11 @@ variable "region" {
   type        = string
 }
 
-variable "cluster_endpoint" {
-  description = "EKS cluster API server endpoint"
-  type        = string
-}
 
 variable "cilium_version" {
   description = "Version of Cilium to install"
   type        = string
-  default     = "1.17.6"
-}
-
-variable "clustermesh_enabled" {
-  description = "Enable ClusterMesh for multi-cluster communication"
-  type        = bool
-  default     = false
+  default     = "1.18.0"
 }
 
 variable "hubble_enabled" {
@@ -48,26 +38,16 @@ variable "hubble_ui_enabled" {
   default     = false
 }
 
-variable "policy_enforcement_mode" {
-  description = "Policy enforcement mode: default, always, never"
+variable "ca_cert_path" {
+  description = "Path to the CA certificate file for ClusterMesh"
   type        = string
-  default     = "default"
-  validation {
-    condition     = contains(["default", "always", "never"], var.policy_enforcement_mode)
-    error_message = "Policy enforcement mode must be one of: default, always, never."
-  }
+  default     = ""
 }
 
-variable "node_selector" {
-  description = "Node selector for Cilium pods"
-  type        = map(string)
-  default     = {}
-}
-
-variable "private_subnet_ids" {
-  description = "List of private subnet IDs for internal load balancer"
-  type        = list(string)
-  default     = []
+variable "ca_key_path" {
+  description = "Path to the CA private key file for ClusterMesh"
+  type        = string
+  default     = ""
 }
 
 variable "tags" {

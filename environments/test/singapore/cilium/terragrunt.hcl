@@ -5,7 +5,7 @@ include "root" {
 }
 
 terraform {
-  source = "../../../../modules/cilium"
+  source = "${dirname(find_in_parent_folders("root.hcl"))}/modules/cilium"
 }
 
 # Dependencies - ensure EKS cluster is created first
@@ -101,18 +101,14 @@ inputs = {
   cluster_id   = 2
   region       = "ap-southeast-1"
 
-  # EKS cluster details
-  cluster_endpoint = dependency.eks.outputs.cluster_endpoint
-
-  # VPC details for internal load balancer
-  private_subnet_ids = dependency.vpc.outputs.private_subnet_ids
+  # CA certificates for ClusterMesh (absolute path from workspace root)
+  ca_cert_path = "${dirname(find_in_parent_folders("root.hcl"))}/cacerts/ca.crt"
+  ca_key_path  = "${dirname(find_in_parent_folders("root.hcl"))}/cacerts/ca.key"
 
   # Cilium Configuration
-  cilium_version          = "1.17.6"
-  clustermesh_enabled     = false
-  hubble_enabled          = true
-  hubble_ui_enabled       = false
-  policy_enforcement_mode = "default"
+  cilium_version    = "1.18.0"
+  hubble_enabled    = true
+  hubble_ui_enabled = false
 
   tags = {
     Project     = "cilium-clustermesh"

@@ -5,7 +5,7 @@ include "root" {
 }
 
 terraform {
-  source = "../../../../modules/vpc"
+  source = "${dirname(find_in_parent_folders("root.hcl"))}/modules/vpc"
 }
 
 # Generate provider configuration for Singapore region

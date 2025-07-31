@@ -5,7 +5,7 @@ include "root" {
 }
 
 terraform {
-  source = "../../../modules/peering"
+  source = "${dirname(find_in_parent_folders("root.hcl"))}/modules/peering"
 }
 
 # Dependencies - ensure VPCs are created first

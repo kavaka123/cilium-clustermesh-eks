@@ -5,7 +5,7 @@ include "root" {
 }
 
 terraform {
-  source = "../../../../modules/eks"
+  source = "${dirname(find_in_parent_folders("root.hcl"))}/modules/eks"
 }
 
 # Dependencies - ensure VPC is created first

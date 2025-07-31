@@ -1,14 +1,16 @@
 fileignoreconfig:
+- filename: Makefile
+  checksum: 7f9f0c912e2ed923a0acc89f72720f1f1469d97375148f23310c96d216392a39
 - filename: devbox.lock
-  checksum: d70729c4fdedef05fb03ce04fb1064c4187442db707d0438d07e10229ec15810
-- filename: environments/test/mumbai/clustermesh/terragrunt.hcl
-  checksum: 3f26d734ad7e45cbb375dac1fda5be58e3a58a2707a4eff9d5d2ebeec3c4bfef
+  checksum: 6f05b6a52988608adc5662a2e0671aafb9ddfc1ea03bd6beaaa27b925ff00d0a
+- filename: environments/test/mumbai/cilium/terragrunt.hcl
+  checksum: 78bcdefd5601d4a639800886f0b720d49dd9a5f4621d3a03cb2efb0688da5107
 - filename: environments/test/mumbai/eks/cluster.yaml
   checksum: 30055c81eabccd21fbb31cc0b10829cdc104456c07ee64d4bbf3614efdd5ea11
-- filename: environments/test/singapore/clustermesh/terragrunt.hcl
-  checksum: d7d887cb97eab507db1d67eaf11971e720c09a72d8786f28a4fb71354c6460e8
-- filename: modules/clustermesh/main.tf
-  checksum: 1ff18070e8f578165876eec2816fc32798acf09acf82d79f28d0bda1966482b7
+- filename: environments/test/singapore/cilium/terragrunt.hcl
+  checksum: 6026beccd4ed84a06fc156609aa87ad05138fd4c78b47baae663130ae7b2810c
+- filename: modules/cilium/main.tf
+  checksum: 2d20723768765fc3628db2f5e8922b17f2737d4a695647daaf1fd1c2f91fcb46
 - filename: modules/eks/main.tf
   checksum: 3229950a9551c5254ac6d6f1e2f7e9562dfd40315db0db26ffea35b60529004e
 - filename: root.hcl

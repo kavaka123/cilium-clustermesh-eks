@@ -170,25 +170,3 @@ resource "aws_eks_addon" "kube_proxy" {
     }
   )
 }
-
-# EKS Add-on for VPC CNI
-resource "aws_eks_addon" "vpc_cni" {
-  cluster_name = aws_eks_cluster.main.name
-  addon_name   = "vpc-cni"
-
-  # Resolve conflicts by overwriting
-  resolve_conflicts_on_create = "OVERWRITE"
-  resolve_conflicts_on_update = "OVERWRITE"
-
-  depends_on = [aws_eks_node_group.main]
-
-  tags = merge(
-    var.tags,
-    {
-      Name = "${var.cluster_name}-vpc-cni"
-    }
-  )
-}
-
-# Note: CoreDNS and metrics-server add-ons are now installed in the Cilium module
-# to ensure proper dependency ordering with Cilium being ready first

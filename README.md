@@ -77,13 +77,6 @@ make mumbai/cilium/apply
 make mumbai/cilium/destroy
 make mumbai/cilium/output
 make mumbai/cilium/validate
-
-# ClusterMesh operations
-make mumbai/clustermesh/plan
-make mumbai/clustermesh/apply
-make mumbai/clustermesh/destroy
-make mumbai/clustermesh/output
-make mumbai/clustermesh/validate
 ```
 
 #### Singapore Region
@@ -108,13 +101,6 @@ make singapore/cilium/apply
 make singapore/cilium/destroy
 make singapore/cilium/output
 make singapore/cilium/validate
-
-# ClusterMesh operations
-make singapore/clustermesh/plan
-make singapore/clustermesh/apply
-make singapore/clustermesh/destroy
-make singapore/clustermesh/output
-make singapore/clustermesh/validate
 ```
 
 #### Cross-Region Components

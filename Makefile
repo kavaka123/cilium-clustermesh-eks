@@ -1,15 +1,63 @@
 # Cilium ClusterMesh Infrastructure Makefile
 
+# Cluster configuration
+CLUSTER1 := mumbai
+CLUSTER2 := singapore
+KUBECONFIG_DIR := ./kubeconfig
+KUBECONFIG := $(KUBECONFIG_DIR)/eks.yaml
+
 terraform_actions := plan apply destroy output validate fmt
-terragrunt_units := mumbai/vpc mumbai/eks mumbai/cilium mumbai/clustermesh singapore/vpc singapore/eks singapore/cilium singapore/clustermesh peering
+terragrunt_units := mumbai/vpc mumbai/eks mumbai/cilium singapore/vpc singapore/eks singapore/cilium peering
 
 terragrunt_cmds = $(foreach unit,$(terragrunt_units), \
 	$(foreach action,$(terraform_actions), \
 		$(unit)/$(action)))
 
-.PHONY: deploy deploy-vpcs deploy-peering deploy-eks deploy-cilium destroy validate fmt clean devbox-init devbox-shell kubeconfig $(terragrunt_cmds)
+.PHONY: help deploy deploy-vpcs deploy-peering deploy-eks deploy-cilium generate-ca patch-aws-node mumbai/patch-aws-node singapore/patch-aws-node destroy validate fmt clean devbox-init devbox-shell kubeconfig setup-env mumbai/clustermesh/enable singapore/clustermesh/enable enable-clustermesh clustermesh/connect $(terragrunt_cmds)
 
-
+# Show help information
+help:
+	@echo "🚀 Cilium ClusterMesh Infrastructure Management"
+	@echo ""
+	@echo "📋 Main Commands:"
+	@echo "  deploy              Deploy complete infrastructure"
+	@echo "  destroy             Destroy all infrastructure"
+	@echo "  kubeconfig          Set up kubeconfig for clusters"
+	@echo "  setup-env           Create environment setup file"
+	@echo ""
+	@echo "🏗️  Stage Deployment:"
+	@echo "  deploy-vpcs         Deploy VPCs in parallel"
+	@echo "  deploy-peering      Deploy VPC peering"
+	@echo "  deploy-eks          Deploy EKS clusters in parallel"
+	@echo "  generate-ca         Generate shared CA certificates for ClusterMesh"
+	@echo "  patch-aws-node      Patch AWS node daemonset on both clusters"
+	@echo "  deploy-cilium       Deploy Cilium in parallel"
+	@echo ""
+	@echo "🌐 ClusterMesh:"
+	@echo "  mumbai/clustermesh/enable     Enable ClusterMesh for Mumbai"
+	@echo "  singapore/clustermesh/enable  Enable ClusterMesh for Singapore"
+	@echo "  enable-clustermesh            Enable ClusterMesh on both clusters"
+	@echo "  clustermesh/connect           Connect clusters via ClusterMesh"
+	@echo ""
+	@echo "🔧 Development:"
+	@echo "  devbox-init         Initialize development environment"
+	@echo "  devbox-shell        Enter development shell"
+	@echo "  validate            Validate all configurations"
+	@echo "  fmt                 Format Terraform files"
+	@echo "  clean               Clean temporary files"
+	@echo ""
+	@echo "🌍 Regional Operations:"
+	@echo "  mumbai/<component>/<action>     - Mumbai region operations"
+	@echo "  singapore/<component>/<action>  - Singapore region operations"
+	@echo "  peering/<action>                - Cross-region peering"
+	@echo ""
+	@echo "📝 Actions: plan, apply, destroy, output, validate, fmt"
+	@echo "🏢 Components: vpc, eks, cilium"
+	@echo ""
+	@echo "💡 Examples:"
+	@echo "  make mumbai/vpc/plan"
+	@echo "  make singapore/eks/apply"
+	@echo "  make deploy -j2"
 
 # Deploy complete infrastructure with proper parallelism
 deploy:
@@ -20,10 +68,16 @@ deploy:
 	@$(MAKE) deploy-peering
 	@echo "Stage 3: Deploying EKS clusters in parallel..."
 	@$(MAKE) deploy-eks -j2
-	@echo "Stage 4: Deploying Cilium in parallel..."
+	@echo "Stage 4: Generating shared CA certificates..."
+	@$(MAKE) generate-ca
+	@echo "Stage 5: Patching AWS node daemonset..."
+	@$(MAKE) patch-aws-node -j2
+	@echo "Stage 6: Deploying Cilium in parallel..."
 	@$(MAKE) deploy-cilium -j2
-	@echo "Stage 5: Deploying ClusterMesh components..."
-	@$(MAKE) deploy-clustermesh -j2
+	@echo "Stage 7: Enabling ClusterMesh in parallel..."
+	@$(MAKE) enable-clustermesh -j2
+	@echo "Stage 8: Connecting clusters via ClusterMesh..."
+	@$(MAKE) clustermesh/connect
 	@echo "✅ Infrastructure deployment completed!"
 
 # Stage targets
@@ -33,17 +87,38 @@ deploy-peering: peering/apply
 
 deploy-eks: mumbai/eks/apply singapore/eks/apply
 
+# Generate shared CA certificates for ClusterMesh
+generate-ca:
+	@echo "🔐 Generating shared CA certificates for ClusterMesh..."
+	@mkdir -p cacerts
+	@if [ ! -f cacerts/ca.key ] || [ ! -f cacerts/ca.crt ]; then \
+		echo "Generating new CA certificate..."; \
+		openssl genrsa -out cacerts/ca.key 4096; \
+		openssl req -new -x509 -key cacerts/ca.key -sha256 \
+			-subj "/C=US/ST=CA/O=Cilium/CN=Cilium CA" \
+			-days 3650 -out cacerts/ca.crt; \
+		echo "✅ CA certificate generated successfully!"; \
+	else \
+		echo "✅ Using existing CA certificate"; \
+	fi
+
 deploy-cilium: mumbai/cilium/apply singapore/cilium/apply
 
-deploy-clustermesh: mumbai/clustermesh/apply singapore/clustermesh/apply
+# Patch AWS node daemonset to prevent conflicts with Cilium
+patch-aws-node: mumbai/patch-aws-node singapore/patch-aws-node
+
+mumbai/patch-aws-node: kubeconfig
+	@echo "🔧 Patching AWS node daemonset for Mumbai cluster..."
+	@devbox run -- bash -c "export KUBECONFIG=\"$(PWD)/$(KUBECONFIG)\" && kubectl --context mumbai -n kube-system patch daemonset aws-node --type='strategic' -p='{\"spec\":{\"template\":{\"spec\":{\"nodeSelector\":{\"io.cilium/aws-node-enabled\":\"true\"}}}}}'"
+
+singapore/patch-aws-node: kubeconfig
+	@echo "🔧 Patching AWS node daemonset for Singapore cluster..."
+	@devbox run -- bash -c "export KUBECONFIG=\"$(PWD)/$(KUBECONFIG)\" && kubectl --context singapore -n kube-system patch daemonset aws-node --type='strategic' -p='{\"spec\":{\"template\":{\"spec\":{\"nodeSelector\":{\"io.cilium/aws-node-enabled\":\"true\"}}}}}'"
 
 
 # Destroy complete infrastructure in reverse order
 destroy:
 	@echo "🔥 Destroying infrastructure..."
-	@echo "Destroying clustermesh components..."
-	-$(MAKE) singapore/clustermesh/destroy
-	-$(MAKE) mumbai/clustermesh/destroy
 	@echo "Destroying cilium components..."
 	-$(MAKE) singapore/cilium/destroy
 	-$(MAKE) mumbai/cilium/destroy
@@ -119,6 +194,31 @@ devbox-shell:
 
 kubeconfig:
 	@echo "🔗 Setting up kubeconfig for EKS clusters..."
-	@aws eks update-kubeconfig --name eks-mumbai --region ap-south-1 --alias mumbai --kubeconfig ./kubeconfig/mumbai.yaml
-	@aws eks update-kubeconfig --name eks-singapore --region ap-southeast-1 --alias singapore --kubeconfig ./kubeconfig/singapore.yaml
+	@mkdir -p $(KUBECONFIG_DIR)
+	@aws eks update-kubeconfig --name eks-mumbai --region ap-south-1 --alias mumbai --kubeconfig $(KUBECONFIG)
+	@aws eks update-kubeconfig --name eks-singapore --region ap-southeast-1 --alias singapore --kubeconfig $(KUBECONFIG)
 	@echo "✅ Kubeconfig setup completed!"
+	@echo "🔧 KUBECONFIG is set to: $(KUBECONFIG)"
+
+# ClusterMesh enable targets - run inside devbox shell
+mumbai/clustermesh/enable: kubeconfig
+	@echo "🔗 Enabling ClusterMesh for Mumbai cluster..."
+	@chmod +x ./scripts/setup-cilium-clustermesh.sh
+	@devbox run -- bash -c "export KUBECONFIG=\"$(PWD)/$(KUBECONFIG)\" && ./scripts/setup-cilium-clustermesh.sh $(CLUSTER1)"
+
+singapore/clustermesh/enable: kubeconfig
+	@echo "🔗 Enabling ClusterMesh for Singapore cluster..."
+	@chmod +x ./scripts/setup-cilium-clustermesh.sh
+	@devbox run -- bash -c "export KUBECONFIG=\"$(PWD)/$(KUBECONFIG)\" && ./scripts/setup-cilium-clustermesh.sh $(CLUSTER2)"
+
+# Enable ClusterMesh on both clusters
+enable-clustermesh: mumbai/clustermesh/enable singapore/clustermesh/enable
+	@echo "✅ ClusterMesh enabled on both clusters!"
+
+# Connect clusters via ClusterMesh
+clustermesh/connect: kubeconfig
+	@echo "🔗 Connecting clusters via ClusterMesh..."
+	@devbox run -- bash -c "export KUBECONFIG=\"$(PWD)/$(KUBECONFIG)\" && cilium clustermesh connect --context $(CLUSTER1) --destination-context $(CLUSTER2)"
+	@devbox run -- bash -c "export KUBECONFIG=\"$(PWD)/$(KUBECONFIG)\" && cilium clustermesh status --context $(CLUSTER1) --wait"
+	@devbox run -- bash -c "export KUBECONFIG=\"$(PWD)/$(KUBECONFIG)\" && cilium clustermesh status --context $(CLUSTER2) --wait"
+	@echo "✅ Clusters connected successfully!"
