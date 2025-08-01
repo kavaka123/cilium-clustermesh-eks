@@ -101,12 +101,9 @@ inputs = {
   cluster_id   = 1
   region       = "ap-south-1"
 
-  # CA certificates for ClusterMesh (absolute path from workspace root)
-  ca_cert_path = "${dirname(find_in_parent_folders("root.hcl"))}/cacerts/ca.crt"
-  ca_key_path  = "${dirname(find_in_parent_folders("root.hcl"))}/cacerts/ca.key"
 
   # Cilium Configuration
-  cilium_version    = "1.18.0"
+  cilium_version    = "1.15.4"
   hubble_enabled    = true
   hubble_ui_enabled = true
 

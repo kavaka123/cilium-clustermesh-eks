@@ -13,7 +13,7 @@ terragrunt_cmds = $(foreach unit,$(terragrunt_units), \
 	$(foreach action,$(terraform_actions), \
 		$(unit)/$(action)))
 
-.PHONY: help deploy deploy-vpcs deploy-peering deploy-eks deploy-cilium generate-ca patch-aws-node mumbai/patch-aws-node singapore/patch-aws-node destroy validate fmt clean devbox-init devbox-shell kubeconfig setup-env mumbai/clustermesh/enable singapore/clustermesh/enable enable-clustermesh clustermesh/connect $(terragrunt_cmds)
+.PHONY: help deploy deploy-vpcs deploy-peering deploy-eks patch-aws-node mumbai/patch-aws-node singapore/patch-aws-node destroy validate fmt clean devbox-init devbox-shell kubeconfig setup-env mumbai/clustermesh/enable singapore/clustermesh/enable enable-cilium-clustermesh clustermesh/connect copy-ca-secret $(terragrunt_cmds)
 
 # Show help information
 help:
@@ -29,14 +29,13 @@ help:
 	@echo "  deploy-vpcs         Deploy VPCs in parallel"
 	@echo "  deploy-peering      Deploy VPC peering"
 	@echo "  deploy-eks          Deploy EKS clusters in parallel"
-	@echo "  generate-ca         Generate shared CA certificates for ClusterMesh"
 	@echo "  patch-aws-node      Patch AWS node daemonset on both clusters"
-	@echo "  deploy-cilium       Deploy Cilium in parallel"
 	@echo ""
 	@echo "🌐 ClusterMesh:"
 	@echo "  mumbai/clustermesh/enable     Enable ClusterMesh for Mumbai"
 	@echo "  singapore/clustermesh/enable  Enable ClusterMesh for Singapore"
-	@echo "  enable-clustermesh            Enable ClusterMesh on both clusters"
+	@echo "  enable-cilium-clustermesh     Complete ClusterMesh setup (7 steps)"
+	@echo "  copy-ca-secret                Copy CA secret from Mumbai to Singapore"
 	@echo "  clustermesh/connect           Connect clusters via ClusterMesh"
 	@echo ""
 	@echo "🔧 Development:"
@@ -68,16 +67,10 @@ deploy:
 	@$(MAKE) deploy-peering
 	@echo "Stage 3: Deploying EKS clusters in parallel..."
 	@$(MAKE) deploy-eks -j2
-	@echo "Stage 4: Generating shared CA certificates..."
-	@$(MAKE) generate-ca
-	@echo "Stage 5: Patching AWS node daemonset..."
+	@echo "Stage 4: Patching AWS node daemonset..."
 	@$(MAKE) patch-aws-node -j2
-	@echo "Stage 6: Deploying Cilium in parallel..."
-	@$(MAKE) deploy-cilium -j2
-	@echo "Stage 7: Enabling ClusterMesh in parallel..."
-	@$(MAKE) enable-clustermesh -j2
-	@echo "Stage 8: Connecting clusters via ClusterMesh..."
-	@$(MAKE) clustermesh/connect
+	@echo "Stage 5: Enabling ClusterMesh (follows 7-step process)..."
+	@$(MAKE) enable-cilium-clustermesh
 	@echo "✅ Infrastructure deployment completed!"
 
 # Stage targets
@@ -86,23 +79,6 @@ deploy-vpcs: mumbai/vpc/apply singapore/vpc/apply
 deploy-peering: peering/apply
 
 deploy-eks: mumbai/eks/apply singapore/eks/apply
-
-# Generate shared CA certificates for ClusterMesh
-generate-ca:
-	@echo "🔐 Generating shared CA certificates for ClusterMesh..."
-	@mkdir -p cacerts
-	@if [ ! -f cacerts/ca.key ] || [ ! -f cacerts/ca.crt ]; then \
-		echo "Generating new CA certificate..."; \
-		openssl genrsa -out cacerts/ca.key 4096; \
-		openssl req -new -x509 -key cacerts/ca.key -sha256 \
-			-subj "/C=US/ST=CA/O=Cilium/CN=Cilium CA" \
-			-days 3650 -out cacerts/ca.crt; \
-		echo "✅ CA certificate generated successfully!"; \
-	else \
-		echo "✅ Using existing CA certificate"; \
-	fi
-
-deploy-cilium: mumbai/cilium/apply singapore/cilium/apply
 
 # Patch AWS node daemonset to prevent conflicts with Cilium
 patch-aws-node: mumbai/patch-aws-node singapore/patch-aws-node
@@ -200,25 +176,41 @@ kubeconfig:
 	@echo "✅ Kubeconfig setup completed!"
 	@echo "🔧 KUBECONFIG is set to: $(KUBECONFIG)"
 
-# ClusterMesh enable targets - run inside devbox shell
+# ClusterMesh enable targets
 mumbai/clustermesh/enable: kubeconfig
-	@echo "🔗 Enabling ClusterMesh for Mumbai cluster..."
-	@chmod +x ./scripts/setup-cilium-clustermesh.sh
-	@devbox run -- bash -c "export KUBECONFIG=\"$(PWD)/$(KUBECONFIG)\" && ./scripts/setup-cilium-clustermesh.sh $(CLUSTER1)"
+	@devbox run -- bash -c "export KUBECONFIG=\"$(PWD)/$(KUBECONFIG)\" && cilium clustermesh enable --context $(CLUSTER1)"
 
 singapore/clustermesh/enable: kubeconfig
-	@echo "🔗 Enabling ClusterMesh for Singapore cluster..."
-	@chmod +x ./scripts/setup-cilium-clustermesh.sh
-	@devbox run -- bash -c "export KUBECONFIG=\"$(PWD)/$(KUBECONFIG)\" && ./scripts/setup-cilium-clustermesh.sh $(CLUSTER2)"
+	@devbox run -- bash -c "export KUBECONFIG=\"$(PWD)/$(KUBECONFIG)\" && cilium clustermesh enable --context $(CLUSTER2)"
 
 # Enable ClusterMesh on both clusters
-enable-clustermesh: mumbai/clustermesh/enable singapore/clustermesh/enable
-	@echo "✅ ClusterMesh enabled on both clusters!"
+enable-cilium-clustermesh:
+	@echo "🔗 Step 1: Deploy Cilium in Mumbai cluster..."
+	@$(MAKE) mumbai/cilium/apply
+	@echo "🔗 Step 2: Copy CA secret from Mumbai to Singapore..."
+	@$(MAKE) copy-ca-secret
+	@echo "🔗 Step 3: Deploy Cilium in Singapore cluster..."
+	@$(MAKE) singapore/cilium/apply
+	@echo "� Step 4: Enable ClusterMesh in Mumbai..."
+	@$(MAKE) mumbai/clustermesh/enable
+	@echo "🔗 Step 5: Enable ClusterMesh in Singapore..."
+	@$(MAKE) singapore/clustermesh/enable
+	@echo "🔗 Step 6: Waiting for ClusterMesh to be ready (1 minute)..."
+	@sleep 60
+	@echo "🔗 Step 7: Connect clusters and wait for status..."
+	@$(MAKE) clustermesh/connect
+	@echo "✅ ClusterMesh setup completed!"
+
+# Copy CA secret from Mumbai to Singapore
+copy-ca-secret: kubeconfig
+	@devbox run -- bash -c "export KUBECONFIG=\"$(PWD)/$(KUBECONFIG)\" && kubectl --context=$(CLUSTER1) get secret -n kube-system cilium-ca -o yaml | kubectl --context=$(CLUSTER2) create -f -"
+
 
 # Connect clusters via ClusterMesh
 clustermesh/connect: kubeconfig
-	@echo "🔗 Connecting clusters via ClusterMesh..."
+	@echo "� Connecting clusters via ClusterMesh..."
 	@devbox run -- bash -c "export KUBECONFIG=\"$(PWD)/$(KUBECONFIG)\" && cilium clustermesh connect --context $(CLUSTER1) --destination-context $(CLUSTER2)"
+	@echo "⏳ Waiting for ClusterMesh status on both clusters..."
 	@devbox run -- bash -c "export KUBECONFIG=\"$(PWD)/$(KUBECONFIG)\" && cilium clustermesh status --context $(CLUSTER1) --wait"
 	@devbox run -- bash -c "export KUBECONFIG=\"$(PWD)/$(KUBECONFIG)\" && cilium clustermesh status --context $(CLUSTER2) --wait"
 	@echo "✅ Clusters connected successfully!"

@@ -57,7 +57,7 @@ inputs = {
   # Basic Configuration
   cluster_id      = "1"
   cluster_name    = "eks-mumbai"
-  cluster_version = "1.33"
+  cluster_version = "1.31"
 
   # VPC Dependencies
   vpc_id             = dependency.vpc.outputs.vpc_id

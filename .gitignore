@@ -43,9 +43,6 @@ Thumbs.db
 kubeconfig*
 *.kubeconfig
 
-# Cilium CA certificates
-cacerts/
-
 # Helm
 charts/
 *.tgz

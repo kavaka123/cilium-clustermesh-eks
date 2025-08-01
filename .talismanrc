@@ -1,6 +1,6 @@
 fileignoreconfig:
 - filename: Makefile
-  checksum: 7f9f0c912e2ed923a0acc89f72720f1f1469d97375148f23310c96d216392a39
+  checksum: c24f78e516b8e4b4b9f7da877f3b35ea5a346cc1d24efbf0863c051d0145e6cd
 - filename: devbox.lock
   checksum: 6f05b6a52988608adc5662a2e0671aafb9ddfc1ea03bd6beaaa27b925ff00d0a
 - filename: environments/test/mumbai/cilium/terragrunt.hcl

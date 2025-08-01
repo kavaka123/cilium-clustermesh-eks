@@ -38,18 +38,6 @@ variable "hubble_ui_enabled" {
   default     = false
 }
 
-variable "ca_cert_path" {
-  description = "Path to the CA certificate file for ClusterMesh"
-  type        = string
-  default     = ""
-}
-
-variable "ca_key_path" {
-  description = "Path to the CA private key file for ClusterMesh"
-  type        = string
-  default     = ""
-}
-
 variable "tags" {
   description = "Tags to apply to resources"
   type        = map(string)

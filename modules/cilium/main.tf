@@ -26,8 +26,22 @@ resource "helm_release" "cilium" {
           mode = "eni"
         }
 
-        # ipv4NativeRoutingCIDR = "10.0.0.0/8"
-        routingMode = "native" # Disable tunneling for ENI mode
+        enableK8sEndpointSlice    = true
+        enableCiliumEndpointSlice = true
+        endpointStatus = {
+          enabled = true
+          status  = "policy"
+        }
+
+        socketLB = {
+          enabled = true
+        }
+        ipv4NativeRoutingCIDR = "10.0.0.0/8"
+        routingMode           = "native" # Disable tunneling for ENI mode
+
+        nodeinit = {
+          enabled = true
+        }
 
         encryption = {
           enabled        = true
@@ -38,6 +52,10 @@ resource "helm_release" "cilium" {
         # Remove node initialization taint
         operator = {
           removeNodeTaints = true
+        }
+
+        externalWorkloads = {
+          enabled = true
         }
 
         #Hubble (observability)
@@ -62,16 +80,7 @@ resource "helm_release" "cilium" {
             memory = "128Mi"
           }
         }
-      },
-      # Conditionally add TLS CA configuration if paths are provided
-      var.ca_cert_path != "" && var.ca_key_path != "" ? {
-        tls = {
-          ca = {
-            cert = base64encode(file(var.ca_cert_path))
-            key  = base64encode(file(var.ca_key_path))
-          }
-        }
-      } : {}
+      }
     ))
   ]
 
